@@ -64,42 +64,50 @@ class _infoState extends State<info> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(4.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: Text("${ widget.dataList[widget.index]['sessions'][index]['date']}",
                               style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 20
                               ),),
                           ),
-                          Text("${ widget.dataList[widget.index]['sessions'][index]['vaccine']}",
-                            style: TextStyle(
-                                fontSize: 12
-                            ),),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text("${ widget.dataList[widget.index]['sessions'][index]['vaccine']}",
+                              style: TextStyle(
+                                  fontSize: 12
+                              ),),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Text('Address: '+"${ widget.dataList[widget.index]['address']}",
+                              style: TextStyle(
+                                  fontSize: 10
+                              ),),
+                          ),
+
 
                         ],
                       ),
                     ),
                     trailing: Text("Age: ${ widget.dataList[widget.index]['sessions'][index]['min_age_limit']}"),
                     subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Total Capacity: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity']}"),
-                        Text("Dose 1: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity_dose1']}"),
-                        Text("Dose 2: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity_dose2']}"),
+                        // Text("Total Capacity: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity']}"),
+                        Text("Dose 1 Capacity: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity_dose1']}"),
+                        Text("Dose 2 Capacity: ${ widget.dataList[widget.index]['sessions'][index]['available_capacity_dose2']}"),
+
                       ],
                     ),
                     leading: Text("Slots :${slotList.length}"),
-
                   ),
                 ),
               ),
             ),
           );
-
         }
         )
-
     );
   }
-
 }

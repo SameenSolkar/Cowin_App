@@ -16,17 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: "Cowin Alert"),
@@ -36,16 +26,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -78,39 +58,14 @@ class _MyHomePageState extends State<MyHomePage> {
     
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return  Scaffold  (
         resizeToAvoidBottomInset : false,
         appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body:   Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
-
+      body: Column(
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -122,9 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   controller: pincodeText,
                 ),
               ),
-              ElevatedButton(onPressed: () {
+              ElevatedButton(onPressed: ()  {
 
-                setState(() {
+                setState(()  {
                   future =   FutureBuilder (
                       builder: (context, projectSnap)  {
                         List listData = projectSnap.data;
@@ -156,7 +111,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 itemBuilder: (context, index) {
                                   //_showNotification();
                                   List sessionList = listData[index]['sessions'];
-
                                   return GestureDetector(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -166,18 +120,22 @@ class _MyHomePageState extends State<MyHomePage> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: ListTile(
-                                            leading: Text(
-                                                "${sessionList.length} Day"),
+                                            // leading: Text(''
+                                            //     "${sessionList[index]['min_age_limit']}"
+                                            // ),
                                             title: Column(
-                                              crossAxisAlignment: CrossAxisAlignment
-                                                  .start,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text("${listData[index]['name']}"),
-                                                Text("${listData[index]['address']}"),
                                               ],
                                             ),
                                             trailing: Text(
-                                                "${listData[index]['fee_type']}"),
+                                                "${listData[index]['fee_type']}",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: listData[index]['fee_type'] == 'Free'?Colors.green:Colors.blue,
+                                              ),
+                                            ),
                                             subtitle: Padding(
                                               padding: const EdgeInsets.all(8.0),
                                               child: SizedBox(
@@ -187,12 +145,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                                       physics: BouncingScrollPhysics(),
                                                         itemCount:  sessionList.length,
                                                         itemBuilder: (context,index){
-                                                          return Text('${sessionList[index]['date']}');
-                                                        }),
+                                                          return Row(
+                                                            children: [
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(right:2.0),
+                                                                child: Text('${sessionList[index]['date']}'),
+                                                              ),
+                                                              Text(sessionList[index]['available_capacity']==0?"Booked":"Available",
+                                                                style:TextStyle(
+                                                                  fontWeight: FontWeight.bold,
+                                                                  color:sessionList[index]['available_capacity']==0?Colors.red:Colors.green
 
+                                                                ),)
+                                                            ],
+                                                          );
+                                                        }),
                                               ),
                                             ),
-
                                           ),
                                         ),
                                       ),
@@ -208,9 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             );
                           }
-
                         }
-
                         else{
                           return Padding(
                             padding: const EdgeInsets.all(20.0),
@@ -220,11 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                       future: getData()
                   );
-
                 });
-
-
-
               },
                   child: Text("CHECK")),
               future == null? Container(): future,
