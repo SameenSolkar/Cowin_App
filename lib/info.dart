@@ -24,6 +24,7 @@ class _infoState extends State<info> {
         itemCount: widget.dataList[widget.index]['sessions'].length,
         itemBuilder: (context, index) {
           List slotList = widget.dataList[widget.index]['sessions'][index]['slots'];
+
           return GestureDetector(
             onTap: (){
               showDialog<void>(
@@ -44,7 +45,6 @@ class _infoState extends State<info> {
 
                             }
                         ),
-
                     ),
                   );
                 },

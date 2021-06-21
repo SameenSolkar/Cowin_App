@@ -77,13 +77,13 @@ class _MyHomePageState extends State<MyHomePage> {
                   controller: pincodeText,
                 ),
               ),
+
               ElevatedButton(onPressed: ()  {
 
-                setState(()  {
-                  future =   FutureBuilder (
+                setState((){
+                  future = FutureBuilder (
                       builder: (context, projectSnap)  {
                         List listData = projectSnap.data;
-
                         if (projectSnap.connectionState == ConnectionState.none &&
                             projectSnap.hasData == null ) {
                           return Container();
@@ -111,6 +111,21 @@ class _MyHomePageState extends State<MyHomePage> {
                                 itemBuilder: (context, index) {
                                   //_showNotification();
                                   List sessionList = listData[index]['sessions'];
+                                  List age = [];
+                                  List vaccinfeeList = [];
+                                  for(int i=0;i<sessionList.length;i++){
+                                    age.add(sessionList[i]['min_age_limit']);
+                                  }
+                                  if(age.length >= 1){
+                                    age = age.toSet().toList();
+                                  }
+
+                                  if(listData[index]['fee_type'] == 'Paid'){
+                                    vaccinfeeList.add(listData[index]['vaccine_fees']);
+                                  }
+                                  else {
+                                    vaccinfeeList = [];
+                                  }
                                   return GestureDetector(
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -118,15 +133,58 @@ class _MyHomePageState extends State<MyHomePage> {
                                         shadowColor: Colors.grey,
                                         elevation: 5,
                                         child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
+                                          padding: const EdgeInsets.all(10.0),
                                           child: ListTile(
-                                            // leading: Text(''
-                                            //     "${sessionList[index]['min_age_limit']}"
-                                            // ),
+                                            leading: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(bottom:1.0),
+                                                  child: Text('Age'),
+                                                ),
+
+                                                SizedBox(
+                                                  width: 30,
+                                                  height: (age.length)*19.toDouble(),
+                                                  child: ListView.builder(
+                                                      physics: BouncingScrollPhysics(),
+                                                      itemCount: age.length,
+                                                      itemBuilder: (context,index){
+                                                        return Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.all(1.0),
+                                                              child: Text("${age[index]}+"),
+                                                            )
+                                                          ],
+                                                        );
+                                                      }
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                             title: Column(
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
                                                 Text("${listData[index]['name']}"),
+                                            Padding(
+                                              padding: const EdgeInsets.only(top:4.0),
+                                              child: SizedBox(
+                                                height: (vaccinfeeList.length)*16.toDouble(),
+                                                child: ListView.builder(
+                                                    itemCount: vaccinfeeList.length,
+                                                    itemBuilder: (context, index1) {
+                                                      return Container(
+                                                        child:Text(listData[index]['fee_type'] == 'Paid'?listData[index]['vaccine_fees'][index1]['vaccine'] +'  '+'₹'+listData[index]['vaccine_fees'][index1]['fee'] :'',
+                                                                    style: TextStyle(
+                                                                      fontSize: 12,
+                                                                    ),
+                                                        ),
+                                                      );
+                                                    }
+                                                ),
+                                              ),
+                                            )
                                               ],
                                             ),
                                             trailing: Text(
@@ -155,11 +213,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                                                 style:TextStyle(
                                                                   fontWeight: FontWeight.bold,
                                                                   color:sessionList[index]['available_capacity']==0?Colors.red:Colors.green
-
-                                                                ),)
+                                                                ),
+                                                              )
                                                             ],
                                                           );
-                                                        }),
+                                                        }
+                                                        ),
                                               ),
                                             ),
                                           ),
